@@ -6,17 +6,31 @@ export function throttle (fn, time) {
     if (timer) {
       return
     }
-    if (now - prev >= time) {
-      fn.apply(this)
+    let context = this
+    let args = arguments
+    function runFn () {
+      fn.apply(context, args)
       timer = null
       prev = Date.now()
+    }
+    if (now - prev >= time) {
+      runFn()
     } else {
-      timer = setTimeout(() => {
-        fn.apply(this)
-        timer = null
-        prev = Date.now()
-      }, time)
+      timer = setTimeout(runFn, time)
     }
   }
 }
 
+export function find (arr, fn) {
+  if (!arr.length) return
+  const item = arr.find(fn)
+  return item
+}
+
+export function remove (arr, item) {
+  if (!arr.length) return
+  const index = arr.indexOf(item)
+  if (index > -1) {
+    return arr.splice(index, 1)
+  }
+}

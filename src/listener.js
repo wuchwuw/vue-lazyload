@@ -1,8 +1,10 @@
 export default class Listener {
-  constructor ({ src, el }) {
+  constructor ({ src, el, defaultSrc }) {
     this.src = src
     this.el = el
-    this.loaded = false
+    this.default = defaultSrc
+    this.status = 'loading'  // loading error loaded
+    this.render('loading')
   }
 
   getRect () {
@@ -16,11 +18,27 @@ export default class Listener {
 
   load (cb) {
     loadImage(this.src, (src) => {
-      this.loaded = true
-      this.el.setAttribute('src', src)
+      this.status = 'loaded'
+      this.render('loaded')
     }, (e) => {
+      this.status = 'error'
+      this.render('error')
       console.log(`${this.src} falid`)
     })
+  }
+
+  render (state) {
+    let src
+    switch (state) {
+      case 'loading':
+      case 'error':
+        src = this.default
+        break
+      case 'loaded':
+        src = this.src
+        break
+    }
+    this.el.setAttribute('src', src)
   }
 }
 
