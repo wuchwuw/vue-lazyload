@@ -21,7 +21,7 @@ async function build () {
       format: 'umd',
       name: 'VueLazyload'
     })
-    await write(path.resolve(__dirname, 'vue-lazyload.js'), code)
+    await write(path.resolve(__dirname, 'dist/vue-lazyload.js'), code)
   } catch (e) {
     console.log(e)
   }
